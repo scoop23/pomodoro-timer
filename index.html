@@ -5,8 +5,8 @@
     <link rel="icon" type="image/svg+xml" href="/pomodoro-timer/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite App</title>
-    <script type="module" crossorigin src="/pomodoro-timer/assets/index-bP7-VpGT.js"></script>
-    <link rel="stylesheet" crossorigin href="/pomodoro-timer/assets/index-CN9lJgCB.css">
+    <script type="module" crossorigin src="/pomodoro-timer/assets/index-Vn5tdOpb.js"></script>
+    <link rel="stylesheet" crossorigin href="/pomodoro-timer/assets/index-B6TfCyLF.css">
   </head>
   <body class="body-bg bg-indigo flex flex-col items-center gap-5 justify-center">
       
@@ -14,7 +14,12 @@
   
   <div class="flex w-full h-full justify-center " id="mainContainer">
     <div class="flex w-[700px] h-[400px] flex-col border-[1px] rounded-xl p-[100px] items-center justify-center gap-10" id="container">
-        <div class="time-container"><span id="timer" class="minutes main-number text-[129px] p-3 rounded-md">2:</span><span class="seconds main-number text-[129px]">00</span></div>
+        <div class="breaks flex gap-10 rounded-md">
+          <button class="short-break p-2 rounded-md transition-all">Short Break</button>
+          <button class="medium-break p-2 rounded-md transition-all">Medium break</button>
+          <button class="long-break p-2 rounded-md transition-all">Long Break</button>
+        </div>
+        <div class="time-container"><span id="timer" class="minutes main-number text-[129px] p-3 rounded-md">25:</span><span class="seconds main-number text-[129px]">00</span></div>
         <div id="buttons" class="flex gap-5">
           <button id="btn" class="btn move-right-button start-btn p-5 bg-cyan-500 rounded-md px-5 py-3"> Start </button>
           <button id="btn" class="btn move-right-button reset-btn p-5 bg-yellow-600 rounded-md px-5 py-3"> Reset </button>

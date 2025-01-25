@@ -8,6 +8,7 @@
     "build": "vite build",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
+    "homepage": "https://scoop23.github.io/pomodoro-timer/",
     "preview": "vite preview"
   },
   "devDependencies": {

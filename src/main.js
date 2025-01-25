@@ -60,19 +60,18 @@ anim.addEventListener("mouseout", (e) => {
 let intervalId = undefined;
 const startButton = document.querySelector('.start-btn');
 const stopButton = document.querySelector('.stop-btn')
-const resumeButton = document.querySelector('.resume-btn')
 const resetButton = document.querySelector('.reset-btn')
 const resumeBtn = document.querySelector(".resume-btn")
+const shortBreakBtn = document.querySelector(".short-break")
+const mediumBreakBtn = document.querySelector(".medium-break")
+const longBreakBtn = document.querySelector(".long-break")
 
 startButton.addEventListener("click", () => {
     
   if (!intervalId) {
     intervalId = timer();
   } else {
-    gsap.to(startButton , {
-      background: "red",
-      duration: 0.5,
-    })
+    
     console.log("Timer already running, can't resume.");
   }
 
@@ -81,36 +80,37 @@ startButton.addEventListener("click", () => {
 let activated = false
 
 stopButton.addEventListener("click", () => {
-  if(intervalId) {
-    const timeline = gsap.timeline()
-  
+  const timeline = gsap.timeline()
+
     if(!activated){
+      
+    if (intervalId) {
       timeline.to(resumeBtn , {
-        x: -35,
+        x: -86,
         duration: 0.5,
         visibility: "visible",
         opacity: "100%",
       }, 0.080);
       
       timeline.to(stopButton , {
-        x: 70,
+        x: 30,
         duration: 0.2
       }, 0.080);
     
       moveRightBtn.forEach(button => {
         timeline.to(button , {
-          x: -50,
+          x: -110,
           duration: 0.2,
         }, 0.080)
       });
-  
-      
+
       activated = true;
-    }else{
-      console.error("hey bobo")
-    }
-  
-    if (intervalId) {
+
+      gsap.to(startButton, {
+        opacity: 0,
+        duration: 0.2,
+      })
+      
       clearInterval(intervalId)
     
       intervalId = null;  
@@ -126,8 +126,14 @@ resumeBtn.addEventListener("click" , () => {
   const revert = gsap.timeline()
 
   revert.to(resumeBtn , {
+    visibility: "hidden",
     opacity: 0,
     duration: 0.2,
+  })
+
+  revert.to(startButton, {
+    opacity: "100%",
+    duration: 0.5,
   })
 
   moveRightBtn.forEach(button => {
@@ -163,12 +169,53 @@ resetButton.addEventListener("click" , () => {
     clearInterval(intervalId)
     intervalId = null
     gsap.to(startButton , {
-      background: cyan,
       duration: 0.5
     })
   }
-  
-  
+})
 
 
+shortBreakBtn.addEventListener("click", () => {
+  let minutes = document.querySelector('.minutes');
+  let seconds = document.querySelector('.seconds');
+
+  if(intervalId) {
+    clearInterval(intervalId);
+    intervalId = null;
+    minutes.textContent = "5:"
+    seconds.textContent = "00"
+  }
+
+  minutes.textContent = "5:"
+  seconds.textContent = "00"
+})
+
+mediumBreakBtn.addEventListener("click" , () => {
+  let minutes = document.querySelector('.minutes');
+  let seconds = document.querySelector('.seconds');
+
+  if(intervalId) {
+    clearInterval(intervalId);
+    intervalId = null;
+    minutes.textContent = "10:"
+    seconds.textContent = "00"
+  }
+
+  minutes.textContent = "10:"
+  seconds.textContent = "00"
+})
+
+longBreakBtn.addEventListener("click" , () => {
+  let minutes = document.querySelector('.minutes');
+  let seconds = document.querySelector('.seconds');
+
+  if(intervalId) {
+    clearInterval(intervalId);
+    intervalId = null;
+    minutes.textContent = "15:"
+    seconds.textContent = "00"
+  }
+
+  minutes.textContent = "15:"
+  seconds.textContent = "00"
 })

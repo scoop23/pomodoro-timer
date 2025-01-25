@@ -81,9 +81,9 @@ button {
 .resume-btn{
   position: fixed;
   visibility: hidden;
-  
   opacity: 0;
   right: 200px;
+  bottom: 19px;
 }
 
 /* button::before {

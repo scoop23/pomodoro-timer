@@ -4,7 +4,6 @@ var pad = '0'
 
 
 export function timer() {
-  let arrayId = [];
   const pad = '0'
   let minutes = document.querySelector('.minutes');
   let seconds = document.querySelector('.seconds');

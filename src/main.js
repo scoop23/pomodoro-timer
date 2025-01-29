@@ -1,11 +1,12 @@
 import './style.css'
 import './input.css'
 import gsap from 'gsap';
-import colors from 'tailwindcss/colors'
+import colors, { indigo } from 'tailwindcss/colors'
 import javascriptLogo from './javascript.svg'
 import viteLogo from '/vite.svg'
 import { setupCounter } from './counter.js'
 import { Container } from 'postcss'
+import { Howl , Howler } from 'howler';
 
 import { timer } from './timer.js'
 import tailwindConfig from '../tailwind.config.js';
@@ -16,6 +17,7 @@ const btns = document.querySelectorAll(".btn");
 const bodyBg = document.querySelector('.body-bg');
 const moveRightBtn = document.querySelectorAll(".move-right-button")
 
+const body = document.querySelector("body")
 
 btns.forEach(btn => {
   let a = 0;
@@ -67,9 +69,13 @@ const mediumBreakBtn = document.querySelector(".medium-break")
 const longBreakBtn = document.querySelector(".long-break")
 
 startButton.addEventListener("click", () => {
-    
+  
+
   if (!intervalId) {
     intervalId = timer();
+    body.style.transition = '2s'
+    body.style.background = '#396bbd'
+
   } else {
     
     console.log("Timer already running, can't resume.");
@@ -85,6 +91,8 @@ stopButton.addEventListener("click", () => {
     if(!activated){
       
     if (intervalId) {
+      body.style.transition = '2s'
+      body.style.background = '#ff5733'
       timeline.to(resumeBtn , {
         x: -86,
         duration: 0.5,
@@ -124,7 +132,8 @@ stopButton.addEventListener("click", () => {
 
 resumeBtn.addEventListener("click" , () => {
   const revert = gsap.timeline()
-
+    body.style.transition = '2s'
+    body.style.background = '#396bbd' 
   revert.to(resumeBtn , {
     visibility: "hidden",
     opacity: 0,
@@ -154,6 +163,9 @@ resumeBtn.addEventListener("click" , () => {
 })
 
 resetButton.addEventListener("click" , () => {
+
+  body.style.transition = "3s"
+  body.style.background = "indigo"
 
   const cyan = colors.cyan[500];
   let minutes = document.querySelector('.minutes');
@@ -219,3 +231,4 @@ longBreakBtn.addEventListener("click" , () => {
   minutes.textContent = "15:"
   seconds.textContent = "00"
 })
+

@@ -51,7 +51,7 @@ export function timer() {
     //   console.log(numLengthSecs)
     //   secsHTML.textContent = numTextSeconds;
     // }
-  }, 10);
+  }, 1000);
   
   return intervalId;
 }

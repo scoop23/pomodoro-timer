@@ -1,3 +1,11 @@
+
+/**
+ * TODO implement a file system where you can drop an mp3 file
+ * and set that as the alarm for the timer.
+ * 
+ */
+
+
 import './style.css'
 import './input.css'
 import gsap from 'gsap';
@@ -10,6 +18,9 @@ import { Howl , Howler } from 'howler';
 
 import { timer } from './timer.js'
 import tailwindConfig from '../tailwind.config.js';
+
+
+
 
 let anim = document.getElementById("container");
 // console.log(anim);
@@ -68,16 +79,20 @@ const shortBreakBtn = document.querySelector(".short-break")
 const mediumBreakBtn = document.querySelector(".medium-break")
 const longBreakBtn = document.querySelector(".long-break")
 
+export let alarmSound = new Howl({
+  src: ['./assets/mp3/JoJo\'s Bizarre Adventure OST - Pillar Men ThemeAwaken.mp3'],
+  volume: 0.3
+})
+
+
 startButton.addEventListener("click", () => {
   
-
   if (!intervalId) {
     intervalId = timer();
     body.style.transition = '2s'
     body.style.background = '#396bbd'
-
+   
   } else {
-    
     console.log("Timer already running, can't resume.");
   }
 
@@ -88,42 +103,51 @@ let activated = false
 stopButton.addEventListener("click", () => {
   const timeline = gsap.timeline()
 
+  
+
+  let minutes = document.querySelector('.minutes');
+  let seconds = document.querySelector('.seconds');
+  if(minutes.textContent === '0:' && seconds.textContent === '00'){
+    alarmSound.stop()
+    console.log("Nothing to Stop")
+    return;
+  }
+  
     if(!activated){
+      if (intervalId) {
+        body.style.transition = '2s'
+        body.style.background = '#ff5733'
+        timeline.to(resumeBtn , {
+          x: -86,
+          duration: 0.5,
+          visibility: "visible",
+          opacity: "100%",
+        }, 0.080);
+        
+        timeline.to(stopButton , {
+          x: 30,
+          duration: 0.2
+        }, 0.080);
       
-    if (intervalId) {
-      body.style.transition = '2s'
-      body.style.background = '#ff5733'
-      timeline.to(resumeBtn , {
-        x: -86,
-        duration: 0.5,
-        visibility: "visible",
-        opacity: "100%",
-      }, 0.080);
-      
-      timeline.to(stopButton , {
-        x: 30,
-        duration: 0.2
-      }, 0.080);
-    
-      moveRightBtn.forEach(button => {
-        timeline.to(button , {
-          x: -110,
+        moveRightBtn.forEach(button => {
+          timeline.to(button , {
+            x: -110,
+            duration: 0.2,
+          }, 0.080)
+        });
+
+        
+        activated = true;
+
+        gsap.to(startButton, {
+          opacity: 0,
           duration: 0.2,
-        }, 0.080)
-      });
-
-      activated = true;
-
-      gsap.to(startButton, {
-        opacity: 0,
-        duration: 0.2,
-      })
+        })
+        clearInterval(intervalId)
       
-      clearInterval(intervalId)
-    
-      intervalId = null;  
-      console.log("Timer stopped" , intervalId);
-    }
+        intervalId = null;  
+        console.log("Timer stopped" , intervalId);
+      }
   }else{
     console.error("no time to stop")
   }
@@ -176,8 +200,9 @@ resetButton.addEventListener("click" , () => {
   
   minutes.textContent = "25:"
   seconds.textContent = "00"
-
+  alarmSound.stop()
   if(intervalId) {
+    alarmSound.stop()
     clearInterval(intervalId)
     intervalId = null
     gsap.to(startButton , {

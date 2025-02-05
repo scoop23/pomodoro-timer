@@ -1,7 +1,7 @@
 import { ssrExportAllKey } from "vite/module-runner";
-
+import { Howl } from "howler";
+import { alarmSound } from "./main";
 var pad = '0'
-
 
 export function timer() {
   const pad = '0'
@@ -14,10 +14,12 @@ export function timer() {
   console.log(numMinutes , numSecs)
   let textNumSecs = numSecs.toString()
 
+  
+
   let intervalId = setInterval(() => {
 
-  
     if(minutes.textContent === '0:' && seconds.textContent === '00') {
+      alarmSound.play()
       clearInterval(intervalId)
       return 
     }
@@ -49,9 +51,7 @@ export function timer() {
     //   console.log(numLengthSecs)
     //   secsHTML.textContent = numTextSeconds;
     // }
-    
-
-  }, 1000);
+  }, 10);
   
   return intervalId;
 }
@@ -59,7 +59,7 @@ export function timer() {
 /*
 
 
-  I OVERCOMPLICATED AND IM SBULLSHITS
+  I OVERCOMPLICATED 
 function Decrementor(numSecs , numMins) {
   let arrayId = [];
   let secsHTML = document.querySelector('.seconds')

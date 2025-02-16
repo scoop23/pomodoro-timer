@@ -1,11 +1,9 @@
 
 /**
  * TODO implement a file system where you can drop an mp3 file
- * and set that as the alarm for the timer.
+ * and set that as the alarm audio for the timer.
  * 
  */
-
-
 import './style.css'
 import './input.css'
 import gsap from 'gsap';
@@ -16,7 +14,7 @@ import { setupCounter } from './counter.js'
 import { Container } from 'postcss'
 import { Howl , Howler } from 'howler';
 
-import { timer } from './timer.js'
+import { timer, worker } from './timer.js'
 import tailwindConfig from '../tailwind.config.js';
 
 
@@ -51,6 +49,8 @@ btns.forEach(btn => {
 })
 
 
+
+
 anim.addEventListener("mouseover", (e) => {
   gsap.to(anim, {
     translateY: -5,
@@ -78,7 +78,8 @@ const resumeBtn = document.querySelector(".resume-btn")
 const shortBreakBtn = document.querySelector(".short-break")
 const mediumBreakBtn = document.querySelector(".medium-break")
 const longBreakBtn = document.querySelector(".long-break")
-
+let minutes = document.querySelector('.minutes');
+let seconds = document.querySelector('.seconds');
 export let alarmSound = new Howl({
   src: ['./assets/mp3/JoJo\'s Bizarre Adventure OST - Pillar Men ThemeAwaken.mp3'],
   volume: 0.3
@@ -86,35 +87,32 @@ export let alarmSound = new Howl({
 
 
 startButton.addEventListener("click", () => {
-  
   if (!intervalId) {
-    intervalId = timer();
-    body.style.transition = '2s'
-    body.style.background = '#396bbd'
-   
+      intervalId = timer();
+      body.style.transition = '2s'
+      body.style.background = '#396bbd'
   } else {
     console.log("Timer already running, can't resume.");
   }
-
+  
 });
 
 let activated = false
 
 stopButton.addEventListener("click", () => {
   const timeline = gsap.timeline()
-
   
 
-  let minutes = document.querySelector('.minutes');
-  let seconds = document.querySelector('.seconds');
+
   if(minutes.textContent === '0:' && seconds.textContent === '00'){
     alarmSound.stop()
     console.log("Nothing to Stop")
     return;
   }
-  
     if(!activated){
-      if (intervalId) {
+      if (worker) {
+        worker.terminate()
+        alarmSound.stop()
         body.style.transition = '2s'
         body.style.background = '#ff5733'
         timeline.to(resumeBtn , {
@@ -139,12 +137,12 @@ stopButton.addEventListener("click", () => {
         
         activated = true;
 
-        gsap.to(startButton, {
+        timeline.to(startButton, {
           opacity: 0,
           duration: 0.2,
-        })
+        }, 0.080)
         clearInterval(intervalId)
-      
+        
         intervalId = null;  
         console.log("Timer stopped" , intervalId);
       }
@@ -156,30 +154,34 @@ stopButton.addEventListener("click", () => {
 
 resumeBtn.addEventListener("click" , () => {
   const revert = gsap.timeline()
-    body.style.transition = '2s'
-    body.style.background = '#396bbd' 
+  
+  body.style.transition = '2s'
+  body.style.background = '#396bbd' 
+
   revert.to(resumeBtn , {
-    visibility: "hidden",
     opacity: 0,
-    duration: 0.2,
+    duration: 0.5,
+    x : 20,
   })
 
   revert.to(startButton, {
     opacity: "100%",
     duration: 0.5,
-  })
+  }, 0.1)
+  
+  revert.to(stopButton, {
+    x: 0,
+    duration: 0.5
+  }, 0.1)
 
   moveRightBtn.forEach(button => {
-    revert.to(button , {
+    revert.to(button , { 
       x: 0,
       duration: 0.5
     }, 0.1)
   })
 
-  revert.to(stopButton, {
-    x: 0,
-    duration: 0.5
-  }, 0.1)
+  
   activated = false
 
   intervalId = timer()
@@ -192,16 +194,16 @@ resetButton.addEventListener("click" , () => {
   body.style.background = "indigo"
 
   const cyan = colors.cyan[500];
-  let minutes = document.querySelector('.minutes');
-  let seconds = document.querySelector('.seconds');
+  
 
   console.log(minutes)
   console.log(seconds)
   
-  minutes.textContent = "25:"
+  minutes.textContent = "25"
   seconds.textContent = "00"
   alarmSound.stop()
-  if(intervalId) {
+  if(worker) {
+    worker.terminate()
     alarmSound.stop()
     clearInterval(intervalId)
     intervalId = null
@@ -212,33 +214,30 @@ resetButton.addEventListener("click" , () => {
 })
 
 
-shortBreakBtn.addEventListener("click", () => {
-  let minutes = document.querySelector('.minutes');
-  let seconds = document.querySelector('.seconds');
+shortBreakBtn.addEventListener("click", (event) => {
 
-  if(intervalId) {
+  if(worker) {
+    worker.terminate()
     clearInterval(intervalId);
     intervalId = null;
-    minutes.textContent = "5:"
+    minutes.textContent = "1"
     seconds.textContent = "00"
   }
 
-  minutes.textContent = "5:"
+  minutes.textContent = "1"
   seconds.textContent = "00"
 })
 
 mediumBreakBtn.addEventListener("click" , () => {
-  let minutes = document.querySelector('.minutes');
-  let seconds = document.querySelector('.seconds');
-
-  if(intervalId) {
+  if(worker) {
+    worker.terminate()
     clearInterval(intervalId);
     intervalId = null;
-    minutes.textContent = "10:"
+    minutes.textContent = "10"
     seconds.textContent = "00"
   }
 
-  minutes.textContent = "10:"
+  minutes.textContent = "10"
   seconds.textContent = "00"
 })
 
@@ -246,14 +245,16 @@ longBreakBtn.addEventListener("click" , () => {
   let minutes = document.querySelector('.minutes');
   let seconds = document.querySelector('.seconds');
 
-  if(intervalId) {
+  if(worker) {
+    worker.terminate()
     clearInterval(intervalId);
     intervalId = null;
-    minutes.textContent = "15:"
+    minutes.textContent = "15"
     seconds.textContent = "00"
   }
 
-  minutes.textContent = "15:"
+  minutes.textContent = "15"
   seconds.textContent = "00"
 })
+
 

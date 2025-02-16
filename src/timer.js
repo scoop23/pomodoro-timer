@@ -1,148 +1,69 @@
 import { ssrExportAllKey } from "vite/module-runner";
 import { Howl } from "howler";
 import { alarmSound } from "./main";
+import { data } from "autoprefixer";
+
 var pad = '0'
+
+export let worker = new Worker(new URL("worker.js", import.meta.url));
 
 export function timer() {
   const pad = '0'
   let minutes = document.querySelector('.minutes');
   let seconds = document.querySelector('.seconds');
-    // console.log("Current minutes:", document.querySelector('.minutes').textContent);
-    // console.log("Current seconds:", document.querySelector('.seconds').textContent);
   let numMinutes = parseInt(minutes.textContent)
   let numSecs = parseInt(seconds.textContent)
+
   console.log(numMinutes , numSecs)
   let textNumSecs = numSecs.toString()
+  if(worker){
+    worker.terminate();
 
-  
+    worker = new Worker(new URL("worker.js" , import.meta.url))
+  }
 
-  let intervalId = setInterval(() => {
+  timerWorker(minutes, seconds);
 
-    if(minutes.textContent === '0:' && seconds.textContent === '00') {
-      alarmSound.play()
-      clearInterval(intervalId)
-      return 
-    }
+  // let intervalId = setInterval(() => {
     
-    if(seconds.textContent === '00'){
-      numMinutes -= 1
-      minutes.textContent = numMinutes + ":"
-      seconds.textContent = 59
-    }else {
-      numSecs = parseInt(seconds.textContent)
-      numSecs -= 1
-      seconds.textContent = numSecs
-      if(numSecs < 10) {
-        numSecs -= 1
-        seconds.textContent = pad + numSecs
-      }
-      console.log(numSecs)
-    }
-  
-    // if(numLengthSecs != 2){
-    //   seconds -= 1;
-    //   numTextSeconds = pad + seconds
-    //   secsHTML.textContent = numTextSeconds
-    //   // timer -= 1;
-    //   // console.log(numLengthSecs)
-    //   // secsHTML.textContent = numTextSeconds;
-    // } else {
-    //   seconds -= 1;
-    //   console.log(numLengthSecs)
-    //   secsHTML.textContent = numTextSeconds;
-    // }
-  }, 1000);
-  
-  return intervalId;
+  //   if(minutes.textContent === '0' && seconds.textContent === '00') {
+  //     alarmSound.play()
+  //     clearInterval(intervalId)
+  //     return 
+  //   }    
+  //   if(seconds.textContent === '00'){
+  //     numMinutes -= 1;
+  //     minutes.textContent = numMinutes;
+  //     seconds.textContent = 59;
+  //   }else if(seconds.textContent > 10){
+  //     numSecs = parseInt(seconds.textContent);
+  //     numSecs -= 1;
+  //     seconds.textContent = numSecs;
+  //   }else{
+  //     numSecs -= 1;
+  //     seconds.textContent = pad + numSecs;
+  //   }
+  // }, 1000);
 }
 
-/*
+export function timerWorker(minutes , seconds) {
+  let strmin = minutes.textContent;
+  let strsec = seconds.textContent;
+  if (window.Worker) {
 
+    worker.onmessage = function(event) {
+        const { min,sec,intervalId} = event.data;
+        console.log(min,sec)
 
-  I OVERCOMPLICATED 
-function Decrementor(numSecs , numMins) {
-  let arrayId = [];
-  let secsHTML = document.querySelector('.seconds')
-  let minsHTML = document.querySelector('.minutes')
-  const pad = '0'
-  let seconds = numSecs
-  let minutes = numMins
-  let secInterval;
-  let intervalId = setInterval(() => {
-    // let numTextMins = minutes.toString()
-    // let numTextSeconds = seconds.toString()
-    // let numLengthSecs = numTextSeconds.length
-    // let numLengthMins = numTextMins.length
-    
-    if(minsHTML.textContent === '0:' && secsHTML.textContent === '00') {
-      clearInterval(secInterval)
-      clearInterval(intervalId)
-      return 
-    }
-    
-    if(secsHTML.textContent === '00'){
-      minutes -= 1
-      minsHTML.textContent = minutes + ":"
-      secsHTML.textContent = 59
+        minutes.textContent = min
+        seconds.textContent = sec
 
-      let minutesinHTML = parseInt(minsHTML.textContent)
-      let secondsinHTML = parseInt(secsHTML.textContent)
-      secInterval = secondsDecrementor(secondsinHTML , secsHTML)
-    } 
-    arrayId.push(intervalId)
-    arrayId.push(secInterval)
-    
-    // if(numLengthSecs != 2){
-    //   seconds -= 1;
-    //   numTextSeconds = pad + seconds
-    //   secsHTML.textContent = numTextSeconds
-    //   // timer -= 1;
-    //   // console.log(numLengthSecs)
-    //   // secsHTML.textContent = numTextSeconds;
-    // } else {
-    //   seconds -= 1;
-    //   console.log(numLengthSecs)
-    //   secsHTML.textContent = numTextSeconds;
-    // }
-    
-  }, 1000);
-  return arrayId;
-} 
-
-
-
-export function secondsDecrementor(seconds , refSecsHTML) {
-  return setInterval(() => {
-    seconds -= 1;
-    let numTextSeconds = seconds.toString()
-    let numLengthSecs = numTextSeconds.length
-
-    
-    
-    if(numLengthSecs >= 2 && numTextSeconds >= 0){
-      console.log(numTextSeconds)
-      refSecsHTML.textContent = numTextSeconds;
-      // seconds -= 1;
-      // numTextSeconds = pad + seconds
-      // console.log(numLengthSecs)
-      // console.log(numTextSeconds)
-      // refSecsHTML.textContent =  numTextSeconds
-      // timer -= 1;
-      // console.log(numLengthSecs)
-      // secsHTML.textContent = numTextSeconds;
-    } else if (numLengthSecs === 1 &&  numTextSeconds > 0){
-      seconds -= 1;
-      numTextSeconds = pad + seconds
-      console.log(numLengthSecs)
-      console.log(numTextSeconds)
-      refSecsHTML.textContent =  numTextSeconds
-      // seconds -= 1;
-      // console.log(numTextSeconds)
-      // refSecsHTML.textContent = numTextSeconds;
-    }
-
-  }, 1000)
+        return intervalId;
+    }; 
   
-}
+    worker.postMessage({strmin , strsec});  // Sending data to the worker
+  } else {
+    console.log("Web Workers are not supported in this browser.");
+  }
 
-*/
+}

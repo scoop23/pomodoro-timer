@@ -17,9 +17,6 @@ import { Howl , Howler } from 'howler';
 import { timer, worker } from './timer.js'
 import tailwindConfig from '../tailwind.config.js';
 
-
-
-
 let anim = document.getElementById("container");
 // console.log(anim);
 const btns = document.querySelectorAll(".btn");
@@ -47,9 +44,6 @@ btns.forEach(btn => {
   })
 
 })
-
-
-
 
 anim.addEventListener("mouseover", (e) => {
   gsap.to(anim, {
@@ -80,6 +74,7 @@ const mediumBreakBtn = document.querySelector(".medium-break")
 const longBreakBtn = document.querySelector(".long-break")
 let minutes = document.querySelector('.minutes');
 let seconds = document.querySelector('.seconds');
+
 export let alarmSound = new Howl({
   src: ['./assets/mp3/JoJo\'s Bizarre Adventure OST - Pillar Men ThemeAwaken.mp3'],
   volume: 0.3
@@ -88,21 +83,18 @@ export let alarmSound = new Howl({
 
 startButton.addEventListener("click", () => {
   if (!intervalId) {
-      intervalId = timer();
+      timer();
       body.style.transition = '2s'
       body.style.background = '#396bbd'
   } else {
     console.log("Timer already running, can't resume.");
   }
-  
 });
 
 let activated = false
 
 stopButton.addEventListener("click", () => {
   const timeline = gsap.timeline()
-  
-
 
   if(minutes.textContent === '0:' && seconds.textContent === '00'){
     alarmSound.stop()
@@ -180,7 +172,6 @@ resumeBtn.addEventListener("click" , () => {
       duration: 0.5
     }, 0.1)
   })
-
   
   activated = false
 
@@ -192,21 +183,16 @@ resetButton.addEventListener("click" , () => {
 
   body.style.transition = "3s"
   body.style.background = "indigo"
-
   const cyan = colors.cyan[500];
-  
-
   console.log(minutes)
   console.log(seconds)
-  
+
   minutes.textContent = "25"
   seconds.textContent = "00"
   alarmSound.stop()
   if(worker) {
     worker.terminate()
     alarmSound.stop()
-    clearInterval(intervalId)
-    intervalId = null
     gsap.to(startButton , {
       duration: 0.5
     })
@@ -216,29 +202,29 @@ resetButton.addEventListener("click" , () => {
 
 shortBreakBtn.addEventListener("click", (event) => {
 
-  if(worker) {
-    worker.terminate()
-    clearInterval(intervalId);
-    intervalId = null;
-    minutes.textContent = "1"
+  if(worker) { // if worker exist
+    worker.terminate() // terminate it the timer.js from the startbutton will handle starting it again and create a web worker
+    minutes.textContent = "5"
     seconds.textContent = "00"
+    alarmSound.stop()
   }
-
-  minutes.textContent = "1"
+  alarmSound.stop()
+  minutes.textContent = "5"
   seconds.textContent = "00"
 })
 
 mediumBreakBtn.addEventListener("click" , () => {
   if(worker) {
     worker.terminate()
-    clearInterval(intervalId);
-    intervalId = null;
     minutes.textContent = "10"
     seconds.textContent = "00"
-  }
+    alarmSound.stop()
 
+  }
   minutes.textContent = "10"
   seconds.textContent = "00"
+  alarmSound.stop()
+
 })
 
 longBreakBtn.addEventListener("click" , () => {
@@ -247,14 +233,13 @@ longBreakBtn.addEventListener("click" , () => {
 
   if(worker) {
     worker.terminate()
-    clearInterval(intervalId);
-    intervalId = null;
     minutes.textContent = "15"
     seconds.textContent = "00"
+    alarmSound.stop()
   }
-
   minutes.textContent = "15"
   seconds.textContent = "00"
+    alarmSound.stop()
 })
 
 

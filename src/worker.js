@@ -1,4 +1,3 @@
-
 self.onmessage = function (event) {
   let { strmin, strsec } = event.data; // Get initial values
   let min = Number(strmin)
@@ -7,14 +6,14 @@ self.onmessage = function (event) {
   let intervalId = setInterval(() => {
     if (min === 0 && sec === 0) {
       console.log("hey");
-      clearInterval(timer); // Stop the timer when it reaches 00:00
       return;
     }
     if(sec === 0){
       min--;
       sec = 59;
+    }else{
+      sec--;
     }
-    sec--;
     
     self.postMessage({ 
       min : String(min),

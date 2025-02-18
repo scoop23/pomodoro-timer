@@ -15,17 +15,22 @@ export function timer() {
   let numSecs = parseInt(seconds.textContent)
 
   console.log(numMinutes , numSecs)
-  let textNumSecs = numSecs.toString()
-  if(worker){
-    worker.terminate();
-
-    worker = new Worker(new URL("worker.js" , import.meta.url))
+  
+  if(worker){ // if a worker exists 
+    worker.terminate(); // terminate it
+    worker = new Worker(new URL("worker.js" , import.meta.url)) 
+    // and create a new one called worker because the other 'worker' is destroyed
+    // you can reaasign it                                                          
   }
 
   timerWorker(minutes, seconds);
-
+  
   // let intervalId = setInterval(() => {
-    
+  if(minutes.textContent === '0' && seconds.textContent === '00') {
+    alarmSound.play()
+    console.log("oloy")
+    return 
+  }  
   //   if(minutes.textContent === '0' && seconds.textContent === '00') {
   //     alarmSound.play()
   //     clearInterval(intervalId)
@@ -49,9 +54,11 @@ export function timer() {
 export function timerWorker(minutes , seconds) {
   let strmin = minutes.textContent;
   let strsec = seconds.textContent;
-  if (window.Worker) {
+  if (window.Worker) { // checks if web workers are supported in the browser
 
-    worker.onmessage = function(event) {
+    worker.onmessage = function(event) { 
+      // this is the data that we received from the worker.js sent
+      // the onmessage is a event listener
         const { min,sec,intervalId} = event.data;
         console.log(min,sec)
 
@@ -61,7 +68,7 @@ export function timerWorker(minutes , seconds) {
         return intervalId;
     }; 
   
-    worker.postMessage({strmin , strsec});  // Sending data to the worker
+    worker.postMessage({strmin , strsec});  // this is the data that we will send to the worker.js
   } else {
     console.log("Web Workers are not supported in this browser.");
   }

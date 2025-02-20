@@ -3,8 +3,6 @@ import { Howl } from "howler";
 import { alarmSound } from "./main";
 import { data } from "autoprefixer";
 
-var pad = '0'
-
 export let worker = new Worker(new URL("worker.js", import.meta.url));
 
 export function timer() {
@@ -28,6 +26,7 @@ export function timer() {
   // let intervalId = setInterval(() => {
   if(minutes.textContent === '0' && seconds.textContent === '00') {
     alarmSound.play()
+    worker.terminate();
     console.log("oloy")
     return 
   }  
@@ -59,7 +58,7 @@ export function timerWorker(minutes , seconds) {
     worker.onmessage = function(event) { 
       // this is the data that we received from the worker.js sent
       // the onmessage is a event listener
-        const { min,sec,intervalId} = event.data;
+        const { min,sec,intervalId } = event.data;
         console.log(min,sec)
 
         minutes.textContent = min

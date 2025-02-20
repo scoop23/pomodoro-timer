@@ -13,7 +13,6 @@ import viteLogo from '/vite.svg'
 import { setupCounter } from './counter.js'
 import { Container } from 'postcss'
 import { Howl , Howler } from 'howler';
-
 import { timer, worker } from './timer.js'
 import tailwindConfig from '../tailwind.config.js';
 
@@ -80,9 +79,10 @@ export let alarmSound = new Howl({
   volume: 0.3
 })
 
-
+let timeIsRunning = false;
 startButton.addEventListener("click", () => {
-  if (!intervalId) {
+  if (!timeIsRunning) {
+      timeIsRunning = true;
       timer();
       body.style.transition = '2s'
       body.style.background = '#396bbd'
@@ -98,6 +98,7 @@ stopButton.addEventListener("click", () => {
 
   if(minutes.textContent === '0:' && seconds.textContent === '00'){
     alarmSound.stop()
+    worker.terminate();
     console.log("Nothing to Stop")
     return;
   }
@@ -133,10 +134,6 @@ stopButton.addEventListener("click", () => {
           opacity: 0,
           duration: 0.2,
         }, 0.080)
-        clearInterval(intervalId)
-        
-        intervalId = null;  
-        console.log("Timer stopped" , intervalId);
       }
   }else{
     console.error("no time to stop")
@@ -191,6 +188,7 @@ resetButton.addEventListener("click" , () => {
   seconds.textContent = "00"
   alarmSound.stop()
   if(worker) {
+    timeIsRunning = false;
     worker.terminate()
     alarmSound.stop()
     gsap.to(startButton , {
@@ -201,8 +199,10 @@ resetButton.addEventListener("click" , () => {
 
 
 shortBreakBtn.addEventListener("click", (event) => {
-
+  body.style.background = '#392bbd'
+  body.style.transition = '3s' 
   if(worker) { // if worker exist
+    timeIsRunning = false;
     worker.terminate() // terminate it the timer.js from the startbutton will handle starting it again and create a web worker
     minutes.textContent = "5"
     seconds.textContent = "00"
@@ -215,6 +215,7 @@ shortBreakBtn.addEventListener("click", (event) => {
 
 mediumBreakBtn.addEventListener("click" , () => {
   if(worker) {
+    timeIsRunning = false;
     worker.terminate()
     minutes.textContent = "10"
     seconds.textContent = "00"
@@ -232,6 +233,7 @@ longBreakBtn.addEventListener("click" , () => {
   let seconds = document.querySelector('.seconds');
 
   if(worker) {
+    timeIsRunning = false;
     worker.terminate()
     minutes.textContent = "15"
     seconds.textContent = "00"

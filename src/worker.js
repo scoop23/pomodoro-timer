@@ -1,11 +1,12 @@
+
+
 self.onmessage = function (event) {
   let { strmin, strsec } = event.data; // Get initial values
   let min = Number(strmin)
   let sec = Number(strsec)
-
+  
   let intervalId = setInterval(() => {
     if (min === 0 && sec === 0) {
-      console.log("hey");
       return;
     }
     if(sec === 0){

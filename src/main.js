@@ -172,7 +172,7 @@ resumeBtn.addEventListener("click" , () => {
   
   activated = false
 
-  intervalId = timer()
+  timer()
   
 })
 

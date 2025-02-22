@@ -75,7 +75,8 @@ let minutes = document.querySelector('.minutes');
 let seconds = document.querySelector('.seconds');
 
 export let alarmSound = new Howl({
-  src: ['./assets/mp3/JoJo\'s Bizarre Adventure OST - Pillar Men ThemeAwaken.mp3'],
+  src: ['./assets/mp3/Pillar_Men_ThemeAwaken.mp3'],
+  // src: [],
   volume: 0.3
 })
 

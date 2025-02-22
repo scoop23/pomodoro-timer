@@ -75,7 +75,7 @@ let minutes = document.querySelector('.minutes');
 let seconds = document.querySelector('.seconds');
 
 export let alarmSound = new Howl({
-  src: ['./assets/mp3/JoJo\'s Bizarre Adventure OST - Pillar Men ThemeAwaken.mp3'],
+  src: ["https://github.com/scoop23/pomodoro-timer/blob/main/assets/mp3/JoJo's%20Bizarre%20Adventure%20OST%20-%20Pillar%20Men%20ThemeAwaken.mp3"],
   volume: 0.3
 })
 

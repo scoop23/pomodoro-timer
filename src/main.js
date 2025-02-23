@@ -77,11 +77,11 @@ let seconds = document.querySelector('.seconds');
 
 
 export const alarmSound = new Howl({
-  src: ['./public/assets/alarm1.mp3'],
+  src: ['./assets/alarm1.mp3'],
   // src: [],
   volume: 0.3
 })
-
+console.log(alarmSound)
 let timeIsRunning = false;
 startButton.addEventListener("click", () => {
   if (!timeIsRunning) {

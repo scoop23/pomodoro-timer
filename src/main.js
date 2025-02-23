@@ -74,8 +74,10 @@ const longBreakBtn = document.querySelector(".long-break")
 let minutes = document.querySelector('.minutes');
 let seconds = document.querySelector('.seconds');
 
-export let alarmSound = new Howl({
-  src: ['./public/Pillar_Men_ThemeAwaken.mp3'],
+
+
+export const alarmSound = new Howl({
+  src: ['./public/assets/alarm1.mp3'],
   // src: [],
   volume: 0.3
 })

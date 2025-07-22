@@ -1,5 +1,3 @@
-
-
 self.onmessage = function (event) {
   let { strmin, strsec } = event.data; // Get initial values
   let min = Number(strmin)
@@ -21,5 +19,5 @@ self.onmessage = function (event) {
       sec : String(sec).padStart(2 , '0'),
       intervalId
     })
-  }, 1000);
+  }, 100);
 };

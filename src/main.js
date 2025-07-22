@@ -55,6 +55,7 @@ anim.addEventListener("mouseover", (e) => {
 
 anim.addEventListener("mouseout", (e) => {
   if(!anim.contains(e.relatedTarget)) {
+    console.log("hey" , e.relatedTarget)
     gsap.to(anim, {
       translateY: 0,
       duration: 0.5,

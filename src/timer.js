@@ -45,14 +45,12 @@ export function timerWorker(minutes , seconds) {
             worker.terminate();
             return;
         }
-        return intervalId;
     }; 
   
     worker.postMessage({strmin , strsec});  // this is the data that we will send to the worker.js
   } else {
     console.log("Web Workers are not supported in this browser.");
   }
-
 }
 // let intervalId = setInterval(() => {
   

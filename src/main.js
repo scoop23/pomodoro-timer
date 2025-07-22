@@ -61,8 +61,6 @@ anim.addEventListener("mouseout", (e) => {
       duration: 0.5,
       boxShadow: "0px 0px 0px rgba(0, 0, 0, 0.3)", // Reset the box shadow
     });
-  } else {
-    console.log(e.relatedTarget)
   }
 }); 
 

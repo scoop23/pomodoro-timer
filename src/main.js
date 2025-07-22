@@ -54,15 +54,17 @@ anim.addEventListener("mouseover", (e) => {
 });
 
 anim.addEventListener("mouseout", (e) => {
+  // if the mouse hovers out to a target that are not related or a child of anim then reset the box shadow and the position
   if(!anim.contains(e.relatedTarget)) {
-    console.log("hey" , e.relatedTarget)
     gsap.to(anim, {
       translateY: 0,
       duration: 0.5,
       boxShadow: "0px 0px 0px rgba(0, 0, 0, 0.3)", // Reset the box shadow
     });
-  } 
-});
+  } else {
+    console.log(e.relatedTarget)
+  }
+}); 
 
 let intervalId = undefined;
 const startButton = document.querySelector('.start-btn');

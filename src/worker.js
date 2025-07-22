@@ -19,5 +19,5 @@ self.onmessage = function (event) {
       sec : String(sec).padStart(2 , '0'),
       intervalId
     })
-  }, 100);
+  }, 1000);
 };
